@@ -17,6 +17,8 @@ analiseIndividualServer = function(input, output, session, data) {
       dadosFiltrados = data[data$sigla_fiscal %in% input$fiscalInput &
                             data$ano_mes %in% input$periodoInput,]
       
+      dadosFiltrados$prod =  calcProdutividade(dadosFiltrados)
+      
       return(dadosFiltrados)
       
     }
@@ -38,6 +40,63 @@ analiseIndividualServer = function(input, output, session, data) {
                       choices = fiscal,
                       selected = fiscal[1]
     )
+    
+  })
+  
+  # Atualizando infoboxes
+  observe({
+    
+    if(!is.null(dadosGraficos())){
+      
+      # Número de relátorios análisados
+      output$relatorioAnalisados = renderInfoBox({
+        
+        infoBox(
+          title = 'Relátorios Analisados',
+          value = dadosGraficos()$num_RMO,
+          icon = icon('info-circle')
+        )
+        
+      })
+      
+      # Produtividade
+      output$relatorioProdutividade = renderInfoBox({
+        
+        infoBox(
+          title = 'Produtividade',
+          value = round(dadosGraficos()$prod, 2),
+          icon = icon('info-circle')
+        )
+        
+      })
+      
+      # Calcular categoria
+      output$relatorioCategoria = renderInfoBox({
+        
+        categoria = calcularCategoria(dadosGraficos()$prod)
+        
+        infoBox(
+          title = 'Categoria',
+          value = categoria,
+          icon = icon('info-circle')
+        )
+        
+      })
+      
+      # Calcular produtividade excedente
+      output$relatorioProdutividadeExcedente = renderInfoBox({
+        
+        prodExcedente = dadosGraficos()$prod %% 100
+        
+        infoBox(
+          title = 'Produtividade excedente',
+          value = round(prodExcedente, 2),
+          icon = icon('info-circle')
+        )
+        
+      })
+      
+    }
     
   })
   
@@ -71,6 +130,15 @@ analiseIndividualServer = function(input, output, session, data) {
   
   # Gráfico histograma
   output$histograma = renderPlot({
+    
+    if(!is.null(dadosGraficos())){
+      graficoHistograma(dadosGraficos())
+    }
+    
+  })
+  
+  # Gráfico de distruicao
+  output$distribuicaoClasses = renderPlot({
     
     if(!is.null(dadosGraficos())){
       graficoHistograma(dadosGraficos())

@@ -4,15 +4,23 @@
 analiseIndividualUI = function(){
   
   tabItem(tabName = "analiseIndividual",
-          box(width = 12,
-              plotOutput("relatorioClasses", width = '100%')
+          fluidRow(
+            valueBoxOutput("relatorioAnalisados",   width = 3),
+            valueBoxOutput("relatorioProdutividade",   width = 3),
+            valueBoxOutput("relatorioCategoria",   width = 3),
+            valueBoxOutput("relatorioProdutividadeExcedente",   width = 3)
           ),
-          box(width = 4,
-              plotOutput("histograma", width = '100%')
-          ),
-          box(width = 4,
-              plotOutput("distribuicaoClasses", width = '100%')
-          ),
+          fluidRow(
+            box(width = 12,
+                plotOutput("relatorioClasses", width = '100%') %>% withSpinner()
+            ),
+            box(width = 6,
+                plotOutput("histograma", width = '100%') %>% withSpinner()
+            ),
+            box(width = 6,
+                plotOutput("distribuicaoClasses", width = '100%') %>% withSpinner()
+            )
+          )
   )
 }
 
@@ -21,9 +29,9 @@ analiseIndividualUI = function(){
 #==================================================================
 itemMenuAnaliseIndividual = function(){
   
-  menuItem(text = "Análise individual",
+  reactiveMenu(menuItem(text = "Análise individual",
            tabName = "analiseIndividual",
-           icon = icon("bar-chart"),
+           icon = icon("line-chart"),
            selectInput(
              inputId = "fiscalInput",
              label = "Fiscal",
@@ -36,6 +44,6 @@ itemMenuAnaliseIndividual = function(){
              choices = NULL,
              selected = ""
            )
-  )
+  ), tabName = 'analiseIndividual')
   
 }

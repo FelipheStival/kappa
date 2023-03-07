@@ -8,6 +8,35 @@
 #==================================================================
 produtividadePeriodoServer = function(input, output, session, data) {
   
+  # Filtrando dados
+  dadosGraficoPeriodo = reactive({
+    
+    dados = data
+    dados$tempFiltro = criarColunaDataCompleta(dados)
+    
+    # Filtrando dados
+    dados = dados[
+      dados$tempFiltro >= input$periodoProdInput[1] &
+      dados$tempFiltro <= input$periodoProdInput[2],
+    ]
+    
+    # Transformando dados
+    
+    dados$prod = calcProdutividade(dados)
+    
+    dados = dados %>%
+      group_by(ano_mes) %>%
+      summarise(
+        maximo = max(prod),
+        minimo = min(prod)
+      )
+    
+    dados = melt(dados)
+    
+    return(dados)
+    
+  })
+  
   # Atualizando input de periodo
   observe({
     
@@ -32,9 +61,7 @@ produtividadePeriodoServer = function(input, output, session, data) {
     dadosTemp = data
     
     # Criando coluna temporaria para filtrando de dados
-    dadosTemp$tempFiltro = dadosTemp$ano_mes
-    dadosTemp$tempFiltro = paste(dadosTemp$tempFiltro, '01', sep = '/')
-    dadosTemp$tempFiltro = ymd(dadosTemp$tempFiltro)
+    dadosTemp$tempFiltro = criarColunaDataCompleta(dadosTemp)
     
     # Filtrando dados
     dadosTemp = dadosTemp[
@@ -50,8 +77,8 @@ produtividadePeriodoServer = function(input, output, session, data) {
         infoBox(
           title = 'Produtividade Media',
           value = round( mean(dadosTemp$pontos), 2),
-          icon = icon('list'),
-          width = 1
+          icon = icon('info-circle'),
+          color = 'aqua'
         )
         
       })
@@ -61,8 +88,8 @@ produtividadePeriodoServer = function(input, output, session, data) {
         infoBox(
           title = 'Produtividade Mediana',
           value = round(median(dadosTemp$pontos), 2),
-          icon = icon('list'),
-          width = 1
+          icon = icon('info-circle'),
+          color = 'navy'
         )
         
       })
@@ -73,8 +100,8 @@ produtividadePeriodoServer = function(input, output, session, data) {
         infoBox(
           title = 'Produtividade Máxima',
           value = round(max(dadosTemp$pontos), 2),
-          icon = icon('list'),
-          width = 1
+          icon = icon('info-circle'),
+          color = 'blue'
         )
         
       })
@@ -84,14 +111,40 @@ produtividadePeriodoServer = function(input, output, session, data) {
         infoBox(
           title = 'Produtividade Mínima',
           value = round(min(dadosTemp$pontos), 2),
-          icon = icon('list'),
-          width = 1
+          icon = icon('info-circle'),
+          color = 'teal'
         )
         
       })
       
     }
   
+    
+  })
+  
+  # Escrevendo gráfico de produtivadade por periódo
+  output$produtividadePeriodo = renderPlot({
+    
+    if(nrow(dadosGraficoPeriodo()) > 1){
+      graficoProdutividadePeriodo(dadosGraficoPeriodo())
+    }
+    
+  })
+  
+  # Escrevendo tabela
+  output$produtividadeTable = renderDataTable({
+    
+    if(nrow(dadosGraficoPeriodo()) > 1){
+      
+      dadosLegenda = dcast(dadosGraficoPeriodo(), variable ~ ano_mes )
+      dadosLegenda$variable = as.character(dadosLegenda$variable)
+      
+      dadosLegenda$variable[1] = '<img src="/icon/maximo.png" height="20" width="80"></img>'
+      dadosLegenda$variable[2] = '<img src="/icon/minimo.png" height="20" width="80"></img>'
+      
+      return(datatable(dadosLegenda, options = list(scrollX = TRUE, dom = 't'), escape = FALSE))
+      
+    }
     
   })
   

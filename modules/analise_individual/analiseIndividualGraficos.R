@@ -30,4 +30,10 @@ graficoRelatorioClasses = function(dados){
 #======================================================
 graficoHistograma = function(dados){
   
+  plot = ggplot(iris, aes(x = Sepal.Length)) +
+    geom_histogram(bins = 30) +
+    ggtitle("30 classes")
+  
+  return(plot)
+  
 }

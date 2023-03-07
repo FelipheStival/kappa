@@ -1,6 +1,7 @@
 
 
 ui = dashboardPage(
+  
   #========================header=========================
   
   dashboardHeader( title =  APP_NAME),
@@ -11,7 +12,6 @@ ui = dashboardPage(
   #=======================SiderBar========================
   
   dashboardSidebar(
-    
     sidebarMenu(
       itemMenuAnaliseIndividual(),
       itemMenuProdutividadePeriodo()
@@ -23,8 +23,10 @@ ui = dashboardPage(
   #=======================body=============================
   
   dashboardBody(
-    #analiseIndividualUI(),
-    produtividadePeriodoUI()
+    tabItems(
+      analiseIndividualUI(),
+      produtividadePeriodoUI()
+    )
   )
   
   #========================================================

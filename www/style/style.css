@@ -1,0 +1,13 @@
+  /* Tabela */
+  .table-container {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Cabeçalho */
+  .table-container th {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    background-color: white;
+  }
