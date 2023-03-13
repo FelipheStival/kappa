@@ -1,13 +1,29 @@
-  /* Tabela */
-  .table-container {
-    overflow-x: auto;
-    white-space: nowrap;
-  }
+.skin-blue .main-header .logo {
+  background-color: #161925;
+}
 
-  /* Cabeçalho */
-  .table-container th {
-    position: -webkit-sticky; /* Safari */
-    position: sticky;
-    top: 0;
+.skin-blue .main-sidebar, .skin-blue .wrapper {
+    background-color: #161925;
+}
+
+.skin-blue .main-header .navbar {
     background-color: white;
-  }
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.skin-blue .main-header .logo:hover {
+    background-color: #161925;
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle {
+    color: black;
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+    background-color: white;
+    color: black;
+}
+
+.skin-blue .sidebar-menu>li>a {
+    border-left: 5px solid transparent;
+}

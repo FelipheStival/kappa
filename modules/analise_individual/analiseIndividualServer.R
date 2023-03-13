@@ -17,8 +17,20 @@ analiseIndividualServer = function(input, output, session, data) {
       dadosFiltrados = data[data$sigla_fiscal %in% input$fiscalInput &
                             data$ano_mes %in% input$periodoInput,]
       
-      dadosFiltrados$prod =  calcProdutividade(dadosFiltrados)
+      return(dadosFiltrados)
       
+    }
+    
+    return(NULL)
+    
+  })
+  
+  # Dados periodo
+  dadosPeriodo = reactive({
+    
+    if(input$periodoInput != ""){
+      
+      dadosFiltrados = data[data$ano_mes %in% input$periodoInput,]
       return(dadosFiltrados)
       
     }
@@ -53,8 +65,7 @@ analiseIndividualServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Relátorios Analisados',
-          value = dadosGraficos()$num_RMO,
-          icon = icon('info-circle')
+          value = dadosGraficos()$num_RMO
         )
         
       })
@@ -64,8 +75,7 @@ analiseIndividualServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Produtividade',
-          value = round(dadosGraficos()$prod, 2),
-          icon = icon('info-circle')
+          value = round(dadosGraficos()$prod, 2)
         )
         
       })
@@ -77,8 +87,7 @@ analiseIndividualServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Categoria',
-          value = categoria,
-          icon = icon('info-circle')
+          value = categoria
         )
         
       })
@@ -90,8 +99,7 @@ analiseIndividualServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Produtividade excedente',
-          value = round(prodExcedente, 2),
-          icon = icon('info-circle')
+          value = round(prodExcedente, 2)
         )
         
       })
@@ -132,7 +140,7 @@ analiseIndividualServer = function(input, output, session, data) {
   output$histograma = renderPlot({
     
     if(!is.null(dadosGraficos())){
-      graficoHistograma(dadosGraficos())
+      graficoHistograma(dadosPeriodo(), dadosGraficos())
     }
     
   })
@@ -141,7 +149,7 @@ analiseIndividualServer = function(input, output, session, data) {
   output$distribuicaoClasses = renderPlot({
     
     if(!is.null(dadosGraficos())){
-      graficoHistograma(dadosGraficos())
+      graficoDistribuicao(dadosPeriodo(), dadosGraficos())
     }
     
   })

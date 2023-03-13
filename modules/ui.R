@@ -12,6 +12,7 @@ ui = dashboardPage(
   #=======================SiderBar========================
   
   dashboardSidebar(
+    includeCSS('www//style//style.css'),
     sidebarMenu(
       itemMenuAnaliseIndividual(),
       itemMenuProdutividadePeriodo()

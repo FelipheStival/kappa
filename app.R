@@ -16,6 +16,7 @@ app.LoadPackages = function()
   require(gridExtra)
   require(DT)
   require(shinycssloaders)
+  require(viridis)
   
   #==============================================#
 }

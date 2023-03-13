@@ -14,11 +14,11 @@ analiseIndividualUI = function(){
             box(width = 12,
                 plotOutput("relatorioClasses", width = '100%') %>% withSpinner()
             ),
-            box(width = 6,
-                plotOutput("histograma", width = '100%') %>% withSpinner()
-            ),
-            box(width = 6,
+            box(width = 7,
                 plotOutput("distribuicaoClasses", width = '100%') %>% withSpinner()
+            ),
+            box(width = 5,
+                plotOutput("histograma", width = '100%') %>% withSpinner()
             )
           )
   )
