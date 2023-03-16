@@ -4,7 +4,12 @@ ui = dashboardPage(
   
   #========================header=========================
   
-  dashboardHeader( title =  APP_NAME),
+  dashboardHeader(
+    title = tags$img(src='logos//crea.png', width = 50),
+    tags$li(class = "dropdown header-logo",
+            tags$img(src = "logos//kappa.png", height = "50px", width = "auto", style = "padding-top:5px;margin-right:5px")
+    )
+  ),
   
   #=======================================================
   
@@ -13,6 +18,7 @@ ui = dashboardPage(
   
   dashboardSidebar(
     includeCSS('www//style//style.css'),
+    useShinyjs(),
     sidebarMenu(
       itemMenuAnaliseIndividual(),
       itemMenuProdutividadePeriodo()
@@ -26,7 +32,8 @@ ui = dashboardPage(
   dashboardBody(
     tabItems(
       analiseIndividualUI(),
-      produtividadePeriodoUI()
+      produtividadePeriodoUI(),
+      analiseEstatisticalUI()
     )
   )
   

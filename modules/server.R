@@ -9,9 +9,12 @@
 server = shinyServer(function(input, output, session) {
   
   data = reactive({
-      
+    
     # Lendo arquivo com dados para a análise
     dados = read.csv('data//dados_analise.csv')
+  
+    # Removendo classe_7_8 dos dados
+    dados$Classe_7_8 = NULL
     
     # Calculando produtivade para cada sigla/periodo
     dadosProd = dados %>%
@@ -20,6 +23,7 @@ server = shinyServer(function(input, output, session) {
     
     # Juntando dados pela colunas sigla/periodo
     dados = inner_join(dados, dadosProd, by = c('sigla_fiscal', 'ano_mes'))
+  
     
     return(dados)
     

@@ -1,14 +1,38 @@
 #==================================================================
+# Análise estátistica UI
+#==================================================================
+analiseEstatisticalUI = function(){
+  
+  tabItem(tabName = 'analiseEstatistica',
+          fluidRow(
+            valueBoxOutput("classe1", width = 6),
+            valueBoxOutput("classe2", width = 6),
+            valueBoxOutput("classe3", width = 6),
+            valueBoxOutput("classe4", width = 6),
+            valueBoxOutput("classe5", width = 6),
+            valueBoxOutput("classe6", width = 6),
+            valueBoxOutput("classe7", width = 6),
+            valueBoxOutput("classe8", width = 6)
+          )
+  )
+  
+}
+
+#==================================================================
 # Análise Gráfica UI
 #==================================================================
 analiseIndividualUI = function(){
   
   tabItem(tabName = "analiseIndividual",
           fluidRow(
-            valueBoxOutput("relatorioAnalisados",   width = 3),
-            valueBoxOutput("relatorioProdutividade",   width = 3),
-            valueBoxOutput("relatorioCategoria",   width = 3),
-            valueBoxOutput("relatorioProdutividadeExcedente",   width = 3)
+            div(
+              class = 'infox-box-analise-individual',
+              valueBoxOutput("relatorioAnalisados"),
+              valueBoxOutput("relatorioProdutividade"),
+              valueBoxOutput("relatorioCategoria"),
+              valueBoxOutput("relatorioProdutividadeExcedente"),
+              valueBoxOutput("relatorioProdutividadeCorrigida")
+            )
           ),
           fluidRow(
             box(width = 12,
@@ -22,6 +46,7 @@ analiseIndividualUI = function(){
             )
           )
   )
+  
 }
 
 #==================================================================
@@ -29,9 +54,10 @@ analiseIndividualUI = function(){
 #==================================================================
 itemMenuAnaliseIndividual = function(){
   
-  reactiveMenu(menuItem(text = "Análise individual",
-           tabName = "analiseIndividual",
+  menuItem(text = "Análise individual",
            icon = icon("line-chart"),
+           menuSubItem("Análise Gráfica", tabName = "analiseIndividual"),
+           menuSubItem("Estátistica", tabName = "analiseEstatistica"),
            selectInput(
              inputId = "fiscalInput",
              label = "Fiscal",
@@ -43,7 +69,12 @@ itemMenuAnaliseIndividual = function(){
              label = "Período",
              choices = NULL,
              selected = ""
+           ),
+           numericInput(
+             inputId = 'fatorDeCorrecaoInput',
+             label = 'Fator de Correção',
+             value = NULL
            )
-  ), tabName = 'analiseIndividual')
+  )
   
 }

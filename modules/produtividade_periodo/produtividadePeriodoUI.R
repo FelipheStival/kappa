@@ -18,7 +18,7 @@ produtividadePeriodoUI = function(){
                   plotOutput('produtividadePeriodo', width = '100%', height = '80vh'),
                   dataTableOutput('produtividadeTable')
                 )
-              )  %>% withSpinner()
+              )
           )
   )
   
@@ -35,12 +35,19 @@ itemMenuProdutividadePeriodo = function(){
              text = "Produtividade por período",
              tabName = "produtividadePeriodo",
              icon = icon("bar-chart"),
-             dateRangeInput(inputId = "periodoProdInput",
-                            label = "Selecione o periodo:",
-                            start = NULL,
-                            end = NULL,
-                            format = "yyyy/mm"
-            )
+             dateRangeInput(
+               inputId = "periodoProdInput",
+               label = "Selecione o periodo:",
+               start = NULL,
+               end = NULL,
+               format = "yyyy/mm"
+             ),
+             selectInput(
+               inputId = "fiscalInputProd",
+               label = "Fiscal",
+               choices = NULL,
+               selected = ""
+             )
     ), tabName = 'produtividadePeriodo')
   
 }

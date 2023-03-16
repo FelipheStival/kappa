@@ -6,7 +6,7 @@
 # @return data.frame com coluna de ano completo criado
 #======================================================
 
-criarColunaDataCompleta= function(dados){
+criarColunaDataCompleta = function(dados){
   
   # Criando coluna temporaria para filtrando de dados
   dados$tempFiltro = dados$ano_mes

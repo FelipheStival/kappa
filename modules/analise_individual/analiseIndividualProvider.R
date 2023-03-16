@@ -1,8 +1,5 @@
 #======================================================
 # Função para calcular a categoria
-#
-# @param prod dados de produtividade
-# @return String com a categoria de acordo com a produtividade
 #======================================================
 
 calcularCategoria = function(prod){
@@ -17,5 +14,18 @@ calcularCategoria = function(prod){
   )
   
   return(categoria)
+  
+}
+
+#======================================================
+# Função para calcular a produtividade relátiva
+#======================================================
+calcularProdutividadeRelativa = function(fatorDeCorrecao, produtividade){
+  
+  if(!is.na(fatorDeCorrecao)){
+    return((100/(100-fatorDeCorrecao)) * produtividade)
+  }
+  
+  return(produtividade)
   
 }

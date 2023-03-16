@@ -8,7 +8,7 @@
 #==================================================================
 produtividadePeriodoServer = function(input, output, session, data) {
   
-  # Filtrando dados
+  # Criando dados por periodo
   dadosGraficoPeriodo = reactive({
     
     dados = data
@@ -20,39 +20,71 @@ produtividadePeriodoServer = function(input, output, session, data) {
       dados$tempFiltro <= input$periodoProdInput[2],
     ]
     
-    # Transformando dados
+    # Calculando dados por fiscal/periodo
+    dadosFiscal = dados %>%
+      filter(sigla_fiscal == input$fiscalInputProd) %>%
+      select(ano_mes, prod)
     
-    dados$prod = calcProdutividade(dados)
+    dadosFiscal = melt(dadosFiscal)
+    dadosFiscal$variable = input$fiscalInputProd
     
-    dados = dados %>%
+    
+    # Calculando dados por periodo
+    dadosPeriodo = dados %>%
       group_by(ano_mes) %>%
       summarise(
         maximo = max(prod),
         minimo = min(prod)
       )
     
-    dados = melt(dados)
+    dadosPeriodo = melt(dadosPeriodo)
+    
+    # Juntando data.frames
+    dados = rbind(dadosPeriodo, dadosFiscal)
     
     return(dados)
     
   })
   
-  # Atualizando input de periodo
+  # Atualizando input de Fiscal
   observe({
     
-    periodo = unique(data$ano_mes)
+    # Filtrando dados
+    fiscal = unique(data$sigla_fiscal)
     
-    minPeriodo = min(periodo)
-    maxPeriodo = max(periodo)
-    
-    updateDateRangeInput(
-      session = session,
-      inputId = 'periodoProdInput',
-      start = minPeriodo,
-      end = maxPeriodo
+    # Atualizando input
+    updateSelectInput(session = session,
+                      inputId = "fiscalInputProd",
+                      choices = fiscal,
+                      selected = fiscal[1]
     )
     
   })
+  
+  
+  # Atualizando input de periodo
+  observe({
+    
+    if(input$fiscalInput != ""){
+      
+      # Filtrando dados
+      periodos = unique(data[data$sigla_fiscal %in% input$fiscalInput, 'ano_mes'])
+      
+      minPeriodo = min(periodos)
+      maxPeriodo = max(periodos)
+      
+      # Atualizando input
+      updateDateRangeInput(
+          session = session,
+          inputId = 'periodoProdInput',
+          start = minPeriodo,
+          end = maxPeriodo
+      )
+      
+    }
+    
+  })
+  
   
   # Atualizando info box da tela principal
   observe({
@@ -76,7 +108,7 @@ produtividadePeriodoServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Produtividade Media',
-          value = round( mean(dadosTemp$pontos), 2),
+          value = round( mean(dadosTemp$prod), 2),
           icon = icon('info-circle'),
           color = 'aqua'
         )
@@ -87,7 +119,7 @@ produtividadePeriodoServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Produtividade Mediana',
-          value = round(median(dadosTemp$pontos), 2),
+          value = round(median(dadosTemp$prod), 2),
           icon = icon('info-circle'),
           color = 'navy'
         )
@@ -99,7 +131,7 @@ produtividadePeriodoServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Produtividade Máxima',
-          value = round(max(dadosTemp$pontos), 2),
+          value = round(max(dadosTemp$prod), 2),
           icon = icon('info-circle'),
           color = 'blue'
         )
@@ -110,7 +142,7 @@ produtividadePeriodoServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Produtividade Mínima',
-          value = round(min(dadosTemp$pontos), 2),
+          value = round(min(dadosTemp$prod), 2),
           icon = icon('info-circle'),
           color = 'teal'
         )
@@ -139,8 +171,11 @@ produtividadePeriodoServer = function(input, output, session, data) {
       dadosLegenda = dcast(dadosGraficoPeriodo(), variable ~ ano_mes )
       dadosLegenda$variable = as.character(dadosLegenda$variable)
       
-      dadosLegenda$variable[1] = '<img src="/icon/maximo.png" height="20" width="80"></img>'
-      dadosLegenda$variable[2] = '<img src="/icon/minimo.png" height="20" width="80"></img>'
+      dadosLegenda$variable[1] = '<center><img src="icon//maximo.png" height="13" width="30">Máximo</img></center>'
+      dadosLegenda$variable[2] = '<center><img src="icon//minimo.png" height="13" width="30">Mínimo</img></center>'
+      dadosLegenda$variable[3] = sprintf('<center><img src="icon//input.png" height="13" width="32"><br>%s</img></center>', input$fiscalInputProd)
+      
+      names(dadosLegenda)[1] = 'Variável'
       
       return(datatable(dadosLegenda, options = list(scrollX = TRUE, dom = 't'), escape = FALSE))
       

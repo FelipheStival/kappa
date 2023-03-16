@@ -1,6 +1,6 @@
 #======================================================
 # Função para criar o gráfico de análise individual
-# de classes
+# de classes.
 #
 # @param dados dados utilizados para gerar o gráfico
 # @return grafico objeto ggplot com gráfico
@@ -8,7 +8,7 @@
 graficoRelatorioClasses = function(dados){
   
   # Criando data.frame formatado para o gráfico
-  dados = dados[,c('classe_1', 'classe_2', 'classe_3', 'classe_4', 'classe_5', 'classe_6', 'classe_7', 'classe_8', 'Classe_7_8')]
+  dados = dados[,c('classe_1', 'classe_2', 'classe_3', 'classe_4', 'classe_5', 'classe_6', 'classe_7', 'classe_8')]
   dados = melt(dados)
   
   colnames(dados) = c('name', 'count')
@@ -21,8 +21,8 @@ graficoRelatorioClasses = function(dados){
     scale_fill_viridis(discrete = TRUE, option = 'G') +
     theme_minimal() +
     xlab('Quantidade(%)') +
-    ylab('Relatórios') +
-    labs(fill="Relatório")
+    ylab('Distribuição dos relatórios por classes') +
+    labs(fill="Classes")
   
   return(grafico)
   
@@ -42,7 +42,7 @@ graficoHistograma = function(dadosPeriodo, dadosSigla){
     geom_density(fill="red", alpha=.1) +
     geom_vline(xintercept = dadosSigla$prod, linetype = 2, color = "red", lwd = 1.2) +
     xlab('Produtividade') +
-    ylab('Densidade') +
+    ylab('Frequência') +
     theme_minimal()
   
   return(grafico)
@@ -59,7 +59,7 @@ graficoHistograma = function(dadosPeriodo, dadosSigla){
 graficoDistribuicao = function(dadosPeriodo, dadosSigla){
   
   # Calculando dados do periodo
-  dadosPlotPeriodo = dadosPeriodo[,c('classe_1', 'classe_2', 'classe_3', 'classe_4', 'classe_5', 'classe_6', 'classe_7', 'classe_8', 'Classe_7_8')]
+  dadosPlotPeriodo = dadosPeriodo[,c('classe_1', 'classe_2', 'classe_3', 'classe_4', 'classe_5', 'classe_6', 'classe_7', 'classe_8')]
   dadosPlotPeriodo = melt(dadosPlotPeriodo)
   
   dadosPlotPeriodo = dadosPlotPeriodo %>%
@@ -70,7 +70,7 @@ graficoDistribuicao = function(dadosPeriodo, dadosSigla){
   dadosPlotPeriodo$prec = paste(round(dadosPlotPeriodo$value/sum(dadosPlotPeriodo$value)*100, 2), '%', sep = '')
   
   # Calculando dados da sigla
-  dadosPlotSigla = dadosSigla[,c('classe_1', 'classe_2', 'classe_3', 'classe_4', 'classe_5', 'classe_6', 'classe_7', 'classe_8', 'Classe_7_8')]
+  dadosPlotSigla = dadosSigla[,c('classe_1', 'classe_2', 'classe_3', 'classe_4', 'classe_5', 'classe_6', 'classe_7', 'classe_8')]
   dadosPlotSigla = melt(dadosPlotSigla)
   
   dadosPlotSigla$prec = paste(round(dadosPlotSigla$value/sum(dadosPlotSigla$value)*100, 2), '%', sep = '')
@@ -91,8 +91,8 @@ graficoDistribuicao = function(dadosPeriodo, dadosSigla){
     theme_minimal() +
     scale_fill_viridis(discrete = TRUE, option = 'H') +
     xlab('Quantidade(%)') +
-    ylab('Relatórios') +
-    labs(fill="Relatório")
+    ylab('Distribuição dos relatórios por classes') +
+    labs(fill="Fiscal")
   
   return(grafico)
   

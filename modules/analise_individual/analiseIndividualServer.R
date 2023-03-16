@@ -104,6 +104,115 @@ analiseIndividualServer = function(input, output, session, data) {
         
       })
       
+      # Escrendo infobox Produtividade Corrigida
+      output$relatorioProdutividadeCorrigida = renderInfoBox({
+        
+        valor = calcularProdutividadeRelativa(input$fatorDeCorrecaoInput, dadosGraficos()$prod)
+        
+        infoBox(
+          title = 'Produtividade Corrigida',
+          value = round(valor, 2)
+        )
+        
+      })
+      
+    }
+    
+  })
+  
+  # Atulizando ferramentas de alteração
+  observe({
+    
+    if(!is.null(dadosGraficos())){
+      
+      # Classe 1 config
+      output$classe1 = renderInfoBox({
+        
+        infoBox(
+          title = 'Classe 1',
+          value = dadosGraficos()$classe_1,
+          icon = icon('cog')
+        )
+        
+      })
+      
+      # Classe 2 config
+      output$classe2 = renderInfoBox({
+        
+        infoBox(
+          title = 'Classe 2',
+          value = dadosGraficos()$classe_2,
+          icon = icon('cog')
+        )
+        
+      })
+      
+      # Classe 3 config
+      output$classe3 = renderInfoBox({
+        
+        infoBox(
+          title = 'Classe 3',
+          value = dadosGraficos()$classe_3,
+          icon = icon('cog')
+        )
+        
+      })
+      
+      # Classe 4 config
+      output$classe4 = renderInfoBox({
+        
+        infoBox(
+          title = 'Classe 4',
+          value = dadosGraficos()$classe_4,
+          icon = icon('cog')
+        )
+        
+      })
+      
+      # Classe 5 config
+      output$classe5 = renderInfoBox({
+        
+        infoBox(
+          title = 'Classe 5',
+          value = dadosGraficos()$classe_5,
+          icon = icon('cog')
+        )
+        
+      })
+      
+      # Classe 6 config
+      output$classe6 = renderInfoBox({
+        
+        infoBox(
+          title = 'Classe 6',
+          value = dadosGraficos()$classe_6,
+          icon = icon('cog')
+        )
+        
+      })
+      
+      # Classe 7 config
+      output$classe7 = renderInfoBox({
+        
+        infoBox(
+          title = 'Classe 7',
+          value = dadosGraficos()$classe_7,
+          icon = icon('cog')
+        )
+        
+      })
+      
+      # Classe 8 config
+      output$classe8 = renderInfoBox({
+        
+        infoBox(
+          title = 'Classe 8',
+          value = dadosGraficos()$classe_8,
+          icon = icon('cog')
+        )
+        
+      })
+      
     }
     
   })
