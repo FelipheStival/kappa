@@ -52,7 +52,25 @@ analiseIndividualUI = function(){
 #==================================================================
 # Análise gráfica menu item
 #==================================================================
+itemMenuTrocarCategoria = function(){
+  
+  menuItem(text = "Trocar categoria",
+           icon = icon("cog"),
+           textInput(
+             inputId = 'categoriaInput',
+             label = 'Categoria',
+             value = ''
+    )
+  )
+  
+}
+
+
+#==================================================================
+# Análise gráfica menu item
+#==================================================================
 itemMenuAnaliseIndividual = function(){
+  
   
   menuItem(text = "Análise individual",
            icon = icon("line-chart"),

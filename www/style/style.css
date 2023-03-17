@@ -27,3 +27,33 @@
 .skin-blue .sidebar-menu>li>a {
     border-left: 5px solid transparent;
 }
+
+.datepicker{
+  z-index: 100000;
+}
+
+.infox-box-analise-individual .shiny-bound-output{
+  width: 20%;
+}
+
+.sidebar-menu{
+  margin-top: 10%;
+}
+
+.logo-footer{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-bottom: 30%;
+  text-align: center;
+}
+
+#fatorDeCorrecaoInput{
+  border-radius: 4px;
+}
+
+#categoriaInput{
+  border-radius: 4px;
+}
+

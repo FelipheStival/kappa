@@ -29,6 +29,8 @@ server = shinyServer(function(input, output, session) {
     
   })
   
+  runjs(sprintf('$("title").html("%s");', APP_NAME))
+  
   # Análise individual Server
   analiseIndividualServer(input, output, session, data())
   

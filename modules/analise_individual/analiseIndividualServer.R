@@ -55,6 +55,40 @@ analiseIndividualServer = function(input, output, session, data) {
     
   })
   
+  # Observando evento de mudança de categoria
+  observeEvent(input$categoriaInput, {
+    
+    categoria = input$categoriaInput
+    
+    if(categoria == ''){
+      categoria =  calcularCategoria(dadosGraficos()$prod)
+    }
+    
+    # Atualizando input
+    updateTextInput(session = session,
+                    inputId = "categoriaInput",
+                    value = categoria
+    )
+    
+  })
+  
+  # Atualizando input de categoria com valor default
+  observe({
+    
+    if(!is.null(dadosGraficos()) && input$categoriaInput == ''){
+      
+      categoria = calcularCategoria(dadosGraficos()$prod)
+      
+      # Atualizando input
+      updateTextInput(session = session,
+                      inputId = "categoriaInput",
+                      value = categoria
+      )
+      
+    }
+    
+  })
+  
   # Atualizando infoboxes
   observe({
     
@@ -83,11 +117,9 @@ analiseIndividualServer = function(input, output, session, data) {
       # Calcular categoria
       output$relatorioCategoria = renderInfoBox({
         
-        categoria = calcularCategoria(dadosGraficos()$prod)
-        
         infoBox(
           title = 'Categoria',
-          value = categoria
+          value = input$categoriaInput
         )
         
       })
