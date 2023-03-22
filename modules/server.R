@@ -29,6 +29,7 @@ server = shinyServer(function(input, output, session) {
     
   })
   
+  # Javascript para alterar o title
   runjs(sprintf('$("title").html("%s");', APP_NAME))
   
   # Análise individual Server

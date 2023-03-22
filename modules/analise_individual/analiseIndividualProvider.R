@@ -1,19 +1,29 @@
 #======================================================
-# Função para calcular a categoria
+# Função para calcular a categoria, caso a categoria
+# não seja encontrada irá escrever uma mensagem de erro
 #======================================================
-
 calcularCategoria = function(prod){
   
-  categoria = case_when(
-    prod >= 0 && prod <= 100 ~ 'F',
-    prod >= 100 && prod <= 200 ~ 'E',
-    prod >= 200 && prod <= 300 ~ 'D',
-    prod >= 300 && prod <= 400 ~ 'C',
-    prod >= 400 && prod <= 500 ~ 'B',
-    prod >= 500 && prod <= 600 ~ 'A'
-  )
+  tempFiltro = classificacaoCategoria[classificacaoCategoria$minimo <= prod & 
+                                      classificacaoCategoria$maximo >= prod,]
   
-  return(categoria)
+  categoria = tempFiltro$categoria
+  
+  if(length(categoria) != 1){
+    
+    htmlError = '<span class = "error" data-toggle="tooltip" title="Verifique os ranges configurados para as categorias!">
+                    Categoria não encontrada
+                </span>
+                <script>
+                    $(".error").tooltip("show");
+                </script>'
+    
+    return(HTML(htmlError))
+    
+  }
+  
+  
+  return(tempFiltro$categoria)
   
 }
 

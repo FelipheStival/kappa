@@ -54,13 +54,24 @@ analiseIndividualUI = function(){
 #==================================================================
 itemMenuTrocarCategoria = function(){
   
-  menuItem(text = "Trocar categoria",
+  menuItem(text = "Configurar categorias",
            icon = icon("cog"),
-           textInput(
+           selectInput(
              inputId = 'categoriaInput',
              label = 'Categoria',
-             value = ''
-    )
+             choices = c('A', 'B', 'C', 'D', 'E', 'F'),
+             selected = 'A'
+           ),
+           numericInput(
+             inputId = 'categoriaMin',
+             label = 'Valor minímo',
+             value = NULL
+           ),
+           numericInput(
+             inputId = 'categoriaMax',
+             label = 'Valor máximo',
+             value = NULL
+           )
   )
   
 }
@@ -91,7 +102,8 @@ itemMenuAnaliseIndividual = function(){
            numericInput(
              inputId = 'fatorDeCorrecaoInput',
              label = 'Fator de Correção',
-             value = NULL
+             value = 0,
+             min = 0
            )
   )
   

@@ -20,9 +20,9 @@ ui = dashboardPage(
     includeCSS('www//style//style.css'),
     useShinyjs(),
     sidebarMenu(
-      itemMenuTrocarCategoria(),
       itemMenuAnaliseIndividual(),
-      itemMenuProdutividadePeriodo()
+      itemMenuProdutividadePeriodo(),
+      itemMenuTrocarCategoria()
     )),
   
   #========================================================

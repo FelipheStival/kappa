@@ -55,35 +55,40 @@ analiseIndividualServer = function(input, output, session, data) {
     
   })
   
-  # Observando evento de mudança de categoria
-  observeEvent(input$categoriaInput, {
+  # Atualizando input de mudança de categoria
+  observe({
     
     categoria = input$categoriaInput
     
-    if(categoria == ''){
-      categoria =  calcularCategoria(dadosGraficos()$prod)
-    }
+    # Obtendo valores
+    valores = classificacaoCategoria[classificacaoCategoria$categoria == categoria,]
     
-    # Atualizando input
-    updateTextInput(session = session,
-                    inputId = "categoriaInput",
-                    value = categoria
+    # Atualizando inputs
+    updateNumericInput(session = session,
+                       inputId = "categoriaMin",
+                       value = valores$minimo,
+                       min = 0
     )
+    
+    updateNumericInput(session = session,
+                       inputId = "categoriaMax",
+                       value = valores$maximo,
+                       min = 0
+    )
+    
+    # Observando mudanças nos valores para a atualização 
     
   })
   
-  # Atualizando input de categoria com valor default
   observe({
     
-    if(!is.null(dadosGraficos()) && input$categoriaInput == ''){
+    # Atualizando valores categoria
+    if(!is.null(input$categoriaMax) && !is.na(input$categoriaMax) && !is.null(input$categoriaInput) && !is.na(input$categoriaMin)){
       
-      categoria = calcularCategoria(dadosGraficos()$prod)
+      classificacaoCategoria[classificacaoCategoria$categoria == input$categoriaInput, 'minimo'] = input$categoriaMin
+      classificacaoCategoria[classificacaoCategoria$categoria == input$categoriaInput, 'maximo'] = input$categoriaMax
       
-      # Atualizando input
-      updateTextInput(session = session,
-                      inputId = "categoriaInput",
-                      value = categoria
-      )
+      classificacaoCategoria <<- classificacaoCategoria
       
     }
     
@@ -93,6 +98,9 @@ analiseIndividualServer = function(input, output, session, data) {
   observe({
     
     if(!is.null(dadosGraficos())){
+      
+      input$categoriaMax
+      input$categoriaMin
       
       # Número de relátorios análisados
       output$relatorioAnalisados = renderInfoBox({
@@ -117,9 +125,11 @@ analiseIndividualServer = function(input, output, session, data) {
       # Calcular categoria
       output$relatorioCategoria = renderInfoBox({
         
+        categoria = calcularCategoria(dadosGraficos()$prod)
+        
         infoBox(
           title = 'Categoria',
-          value = input$categoriaInput
+          value = categoria
         )
         
       })

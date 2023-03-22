@@ -1,9 +1,6 @@
 #======================================================
 # Função para criar o gráfico de análise individual
 # de classes.
-#
-# @param dados dados utilizados para gerar o gráfico
-# @return grafico objeto ggplot com gráfico
 #======================================================
 graficoRelatorioClasses = function(dados){
   
@@ -30,9 +27,6 @@ graficoRelatorioClasses = function(dados){
 
 #======================================================
 # Função para criar o gráfico de histograma
-#
-# @param dados dados utilizados para gerar o gráfico
-# @return grafico objeto ggplot com gráfico
 #======================================================
 graficoHistograma = function(dadosPeriodo, dadosSigla){
   
@@ -52,9 +46,6 @@ graficoHistograma = function(dadosPeriodo, dadosSigla){
 #======================================================
 # Função para criar o gráfico para distribuição 
 # de classes
-#
-# @param dados dados utilizados para gerar o gráfico
-# @return grafico objeto ggplot com gráfico
 #======================================================
 graficoDistribuicao = function(dadosPeriodo, dadosSigla){
   

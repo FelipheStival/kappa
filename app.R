@@ -69,6 +69,14 @@ app.loadGlobalFunctions = function(){
     
   }
   
+  # Dados globais categoria
+  classificacaoCategoria <<- data.frame(
+    categoria =  c('A', 'B', 'C', 'D', 'E', 'F'),
+    minimo = c(0, 100, 200, 300, 400, 500),
+    maximo = c(100, 200, 300, 400, 500, 600)
+  )
+  
+  
 }
 #==============================================#
 

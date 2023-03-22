@@ -1,9 +1,6 @@
 #======================================================
 # Função para criar o gráfico de análise individual
-# de classes
-#
-# @param dados dados utilizados para gerar o gráfico
-# @return grafico objeto ggplot com gráfico
+# de classes.
 #======================================================
 graficoProdutividadePeriodo = function(dados, fiscalSelecionado){
   
@@ -18,7 +15,8 @@ graficoProdutividadePeriodo = function(dados, fiscalSelecionado){
     theme_minimal() +
     ggtitle(title) +
     theme(
-      plot.title = element_text(color="black", size=20)
+      plot.title = element_text(color="black", size=20),
+      axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)
     ) + 
     scale_color_viridis(discrete = TRUE, option = 'D') +
     ylab("") +

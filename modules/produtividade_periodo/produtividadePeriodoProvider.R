@@ -1,11 +1,6 @@
-#======================================================
-# Função para criar o gráfico de análise individual
-# de classes
-#
-# @param dados data.frame que irá criar a coluna com o ano completo
-# @return data.frame com coluna de ano completo criado
-#======================================================
-
+#==========================================================
+# Função para criar uma data completa a partir do mes/ano
+#==========================================================
 criarColunaDataCompleta = function(dados){
   
   # Criando coluna temporaria para filtrando de dados
