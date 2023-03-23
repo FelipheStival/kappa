@@ -278,6 +278,134 @@ analiseIndividualServer = function(input, output, session, data) {
     
   })
   
+  # Observendo evento de click no botao de remover categoria
+  onclick('btn-remove', {
+    
+    # Removendo profundidade
+    if(!is.null(input$categoriaInput)){
+      
+      # Removendo categoria
+      indexRemove = which(classificacaoCategoria$categoria == input$categoriaInput)
+      classificacaoCategoria <<- classificacaoCategoria[-indexRemove, ]
+  
+      # Atualizando nova opção no input de selecao
+      updateSelectInput(session = session,
+                        inputId = "categoriaInput",
+                        choices = classificacaoCategoria$categoria,
+                        selected = classificacaoCategoria$categoria[1]
+      )
+      
+    }
+    
+  })
+  
+  # Observando evento de click no botao para adicionar uma categoria
+  onclick('btn-add', {
+    
+    dataModal = function(falhou = FALSE, messagem = '') {
+      
+      modalDialog(
+        title = 'Cadastrar nova categoria',
+        fluidRow(
+          
+          column(
+            width = 4,
+            textInput(
+              inputId = 'novaCategoriaNome',
+              label = 'Nome nova categoria',
+              value = '',
+              width = NULL
+            )
+          ),
+          
+          column(
+            width = 4,
+            numericInput(
+              inputId = 'novaCategoriaMin',
+              label = 'Minímo',
+              min = 0,
+              value = 0
+            )
+          ),
+          
+          column(
+            width = 4,
+            numericInput(
+              inputId = 'novaCategoriaMax',
+              label = 'Máximo',
+              min = 0,
+              value = 0
+            )
+          ),
+          
+        ),
+        
+        if(falhou)
+          HTML(
+            sprintf(
+            '<div class="alert alert-danger" role="alert">
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                %s
+            </div>', messagem)
+          ),
+        
+        footer = tagList(
+          modalButton("Cancelar"),
+          actionButton("ok", "Cadastrar")
+        )
+        
+      )
+      
+    }
+    
+    showModal(dataModal())
+    
+  })
+  
+  # Observando input de confirmação do modal
+  observeEvent(input$ok, {
+    
+    if(trimws(input$novaCategoriaNome) != '' && input$novaCategoriaMin && input$novaCategoriaMax){
+      
+      # Verificando se categoria já existe, caso não exista será cadastrada
+      check = which(classificacaoCategoria$categoria == trimws(input$novaCategoriaNome))
+      
+      if(length(check) == 0){
+        
+        # Criando data.frame com nova categoria
+        novaCategoria = data.frame(
+          categoria = trimws(input$novaCategoriaNome),
+          minimo = input$novaCategoriaMin,
+          maximo = input$novaCategoriaMax
+        )
+        
+        # Adicionando data.frame no global
+        classificacaoCategoria <<- rbind(classificacaoCategoria, novaCategoria)
+        
+        # Atualizando nova opção no input de selecao
+        updateSelectInput(session = session,
+                          inputId = "categoriaInput",
+                          choices = classificacaoCategoria$categoria
+        )
+        
+        # Mensagem de sucesso
+        showNotification(HTML('<i class="fa fa-check-circle" aria-hidden="true"></i> Categoria cadastrada com sucesso'),
+                         type = 'message', 
+                         duration = 5)
+        
+        removeModal()
+        
+      } else {
+        showModal(dataModal(falhou = TRUE, messagem = 'Nome da categoria já utilizado!'))
+      }
+      
+    } else {
+      showModal(dataModal(falhou = TRUE, messagem = 'Preencha todos os campos!'))
+    }
+    
+  })
+  
+  
   # Gráfico relátorio de classes indívidual
   output$relatorioClasses = renderPlot({
     

@@ -56,11 +56,20 @@ itemMenuTrocarCategoria = function(){
   
   menuItem(text = "Configurar categorias",
            icon = icon("cog"),
-           selectInput(
-             inputId = 'categoriaInput',
-             label = 'Categoria',
-             choices = c('A', 'B', 'C', 'D', 'E', 'F'),
-             selected = 'A'
+           tags$div(
+             class = 'container-categoria-input',
+             selectInput(
+               inputId = 'categoriaInput',
+               label = 'Categoria',
+               choices = c('A', 'B', 'C', 'D', 'E', 'F'),
+               selected = 'A'
+             ),
+             HTML('<button type="button" class="btn btn-primary btn-add" id = "btn-add" data-toggle="tooltip" data-placement="bottom" title="Clique para adicionar uma nova categoria!">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                  </button>'),
+             HTML('<button type="button" class="btn btn-primary btn-remove" id = "btn-remove" data-toggle="tooltip" data-placement="bottom" title="Clique para remover a categoria selecionada!">
+                     <i class="fa fa-trash-o" aria-hidden="true"></i>
+                  </button>')
            ),
            numericInput(
              inputId = 'categoriaMin',

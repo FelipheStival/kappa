@@ -76,3 +76,48 @@
   font-weight: 700;
 }
 
+.container-categoria-input{
+  display: flex;
+  align-items: center;
+}
+
+.btn-remove{
+  height: 50%;
+  width: 17%;
+  margin-right: 5%;
+  background-color: red !important;
+  border: none;
+  margin-top: 2%;
+}
+
+.btn-remove:hover{
+  background-color: #B22222 !important;
+  border: none;
+}
+
+.btn-add{
+  height: 50%;
+  width: 17%;
+  margin-right: 5%;
+  border: none;
+  margin-top: 2%;
+}
+
+#shiny-notification-panel{
+  width: 300px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.shiny-notification-content-text i {
+  margin-right: 2%;
+  font-weight: bold;
+}
+
+.shiny-notification-message{
+  color: white;
+  background-color: green;
+  border-radius: 5px;
+  width: 100%;
+}
+
