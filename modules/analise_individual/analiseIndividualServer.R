@@ -11,13 +11,17 @@ analiseIndividualServer = function(input, output, session, data) {
   # Dados Gráficos
   dadosGraficos = reactive({
     
-    # Filtrando dados de acordo com os inputs
-    if(input$fiscalInput != "" && input$periodoInput != ""){
+    if(!is.null(input$fiscalInput) && !is.null(input$periodoInput)){
       
-      dadosFiltrados = data[data$sigla_fiscal %in% input$fiscalInput &
-                            data$ano_mes %in% input$periodoInput,]
-      
-      return(dadosFiltrados)
+      # Filtrando dados de acordo com os inputs
+      if(input$fiscalInput != "" && input$periodoInput != ""){
+        
+        dadosFiltrados = data[data$sigla_fiscal %in% input$fiscalInput &
+                              data$ano_mes %in% input$periodoInput,]
+        
+        return(dadosFiltrados)
+        
+      }
       
     }
     
@@ -40,41 +44,53 @@ analiseIndividualServer = function(input, output, session, data) {
   })
   
   
+  # dados categoria 
+  classificacaoCategoria <<- data.frame(
+    categoria =  c('A', 'B', 'C', 'D', 'E', 'F'),
+    minimo = c(0, 100, 200, 300, 400, 500),
+    maximo = c(100, 200, 300, 400, 500, 600)
+  )
+  
+  
   # Atualizando input de Fiscal
   observe({
     
-    # Filtrando dados
-    fiscal = unique(data$sigla_fiscal)
-    
-    # Atualizando input
-    updateSelectInput(session = session,
-                      inputId = "fiscalInput",
-                      choices = fiscal,
-                      selected = fiscal[1]
-    )
+      # Filtrando dados
+      fiscal = unique(data$sigla_fiscal)
+        
+      # Atualizando input
+      updateSelectInput(session = session,
+                        inputId = "fiscalInput",
+                        choices = fiscal,
+                        selected = fiscal[1]
+      )
     
   })
   
   # Atualizando input de mudança de categoria
   observe({
     
-    categoria = input$categoriaInput
-    
-    # Obtendo valores
-    valores = classificacaoCategoria[classificacaoCategoria$categoria == categoria,]
-    
-    # Atualizando inputs
-    updateNumericInput(session = session,
-                       inputId = "categoriaMin",
-                       value = valores$minimo,
-                       min = 0
-    )
-    
-    updateNumericInput(session = session,
-                       inputId = "categoriaMax",
-                       value = valores$maximo,
-                       min = 0
-    )
+    if(!is.null(input$categoriaInput)){
+      
+      categoria = input$categoriaInput
+      
+      # Obtendo valores
+      valores = classificacaoCategoria[classificacaoCategoria$categoria == categoria,]
+      
+      # Atualizando inputs
+      updateNumericInput(session = session,
+                         inputId = "categoriaMin",
+                         value = valores$minimo,
+                         min = 0
+      )
+      
+      updateNumericInput(session = session,
+                         inputId = "categoriaMax",
+                         value = valores$maximo,
+                         min = 0
+      )
+      
+    }
     
     # Observando mudanças nos valores para a atualização 
     
@@ -103,57 +119,78 @@ analiseIndividualServer = function(input, output, session, data) {
       input$categoriaMin
       
       # Número de relátorios análisados
-      output$relatorioAnalisados = renderInfoBox({
+      output$relatorioAnalisados = renderValueBox({
         
-        infoBox(
-          title = 'Relátorios Analisados',
-          value = dadosGraficos()$num_RMO
+        valueBox(
+          value = dadosGraficos()$num_RMO,
+          subtitle = 'Relátorios Analisados',
+          icon = icon('file-text')
         )
         
       })
       
       # Produtividade
-      output$relatorioProdutividade = renderInfoBox({
+      output$relatorioProdutividade = renderValueBox({
         
-        infoBox(
-          title = 'Produtividade',
-          value = round(dadosGraficos()$prod, 2)
+        valueBox(
+          value = round(dadosGraficos()$prod, 2),
+          subtitle = 'Produtividade',
+          icon = icon('line-chart')
         )
+
         
       })
       
       # Calcular categoria
-      output$relatorioCategoria = renderInfoBox({
+      output$relatorioCategoria = renderValueBox({
         
         categoria = calcularCategoria(dadosGraficos()$prod)
         
-        infoBox(
-          title = 'Categoria',
-          value = categoria
+        valueBox(
+          value = categoria,
+          subtitle = 'Categoria',
+          icon = icon('list')
         )
+      
         
       })
       
       # Calcular produtividade excedente
-      output$relatorioProdutividadeExcedente = renderInfoBox({
+      output$relatorioProdutividadeExcedente = renderValueBox({
         
         prodExcedente = dadosGraficos()$prod %% 100
         
-        infoBox(
-          title = 'Produtividade excedente',
-          value = round(prodExcedente, 2)
+        valueBox(
+          value = round(prodExcedente, 2),
+          subtitle = 'Produtividade excedente',
+          icon = icon('line-chart')
         )
         
       })
       
       # Escrendo infobox Produtividade Corrigida
-      output$relatorioProdutividadeCorrigida = renderInfoBox({
+      output$relatorioProdutividadeCorrigida = renderValueBox({
         
         valor = calcularProdutividadeRelativa(input$fatorDeCorrecaoInput, dadosGraficos()$prod)
         
-        infoBox(
-          title = 'Produtividade Corrigida',
-          value = round(valor, 2)
+        valueBox(
+          value = round(valor, 2),
+          subtitle = 'Produtividade Corrigida',
+          icon = icon('pencil')
+        )
+        
+      })
+      
+      # Escrevendo infobox produtividade relativa
+      output$relatorioProdutividadeCorrigidaCategoria = renderValueBox({
+        
+        valorProd = calcularProdutividadeRelativa(input$fatorDeCorrecaoInput, dadosGraficos()$prod)
+        categoria = calcularCategoria(valorProd)
+        
+        valueBox(
+          value = categoria,
+          subtitle = 'Categoria Corrigida',
+          icon = icon('pencil')
         )
         
       })
@@ -262,7 +299,7 @@ analiseIndividualServer = function(input, output, session, data) {
   # Atualizando input período
   observe({
     
-    if(input$fiscalInput != ""){
+    if(!is.null(input$fiscalInput)){
       
       # Filtrando dados
       periodos = unique(data[data$sigla_fiscal %in% input$fiscalInput, 'ano_mes'])
@@ -282,7 +319,7 @@ analiseIndividualServer = function(input, output, session, data) {
   onclick('btn-remove', {
     
     # Removendo profundidade
-    if(!is.null(input$categoriaInput)){
+    if(!is.null(input$categoriaInput) && nrow(classificacaoCategoria) > 1){
       
       # Removendo categoria
       indexRemove = which(classificacaoCategoria$categoria == input$categoriaInput)

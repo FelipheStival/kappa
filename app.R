@@ -17,6 +17,8 @@ app.LoadPackages = function()
   require(DT)
   require(shinycssloaders)
   require(viridis)
+  require(shinymanager)
+  require(keyring)
   
   #==============================================#
 }
@@ -36,6 +38,7 @@ app.LoadModules = function() {
   log = sapply(modulos,source,encoding="utf-8")
   
 }
+
 #==============================================#
 
 #==============================================#
@@ -69,22 +72,13 @@ app.loadGlobalFunctions = function(){
     
   }
   
-  # Dados globais categoria
-  classificacaoCategoria <<- data.frame(
-    categoria =  c('A', 'B', 'C', 'D', 'E', 'F'),
-    minimo = c(0, 100, 200, 300, 400, 500),
-    maximo = c(100, 200, 300, 400, 500, 600)
-  )
-  
-  
 }
 #==============================================#
-
+options(shiny.usecairo=T)
 
 app.LoadPackages()
 app.loadGlobalFunctions()
 app.LoadModules()
 
-options(shiny.usecairo=T)
 
 shinyApp(ui, server)

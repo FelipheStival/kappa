@@ -31,7 +31,8 @@ analiseIndividualUI = function(){
               valueBoxOutput("relatorioProdutividade"),
               valueBoxOutput("relatorioCategoria"),
               valueBoxOutput("relatorioProdutividadeExcedente"),
-              valueBoxOutput("relatorioProdutividadeCorrigida")
+              valueBoxOutput("relatorioProdutividadeCorrigida"),
+              valueBoxOutput("relatorioProdutividadeCorrigidaCategoria")
             )
           ),
           fluidRow(

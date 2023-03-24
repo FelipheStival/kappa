@@ -2,6 +2,7 @@
 
 ui = dashboardPage(
   
+  
   #========================header=========================
   
   dashboardHeader(
@@ -11,7 +12,7 @@ ui = dashboardPage(
     )
   ),
   
-  #=======================================================
+  #===============================================data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAWElEQVR42mNgGPTAxsZmJsVqQApgmGw1yApwKcQiT7phRBuCzzCSDSHGMKINIeDNmWQlA2IigKJwIssQkHdINgxfmBBtGDEBS3KCxBc7pMQgMYE5c/AXPwAwSX4lV3pTWwAAAABJRU5ErkJggg==========
   
   
   #=======================SiderBar========================
@@ -40,3 +41,9 @@ ui = dashboardPage(
   
   #========================================================
 )
+
+# Caso a global NEED_LOGIN esteja ativada, a tela de login será requirida
+if(LOGIN){
+  ui = secure_app(ui, enable_admin = TRUE, theme = 'flatly', language = 'pt-BR')
+}
+

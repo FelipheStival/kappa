@@ -8,6 +8,16 @@
 
 server = shinyServer(function(input, output, session) {
   
+  # Checando credenciais 
+  secure_server(
+    
+    check_credentials = check_credentials(
+      "db_login//login.sqlite",
+      passphrase = key_get("R-shinymanager-key", "admin123")
+    )
+    
+  )
+  
   data = reactive({
     
     # Lendo arquivo com dados para a análise
@@ -28,6 +38,7 @@ server = shinyServer(function(input, output, session) {
     return(dados)
     
   })
+    
   
   # Javascript para alterar o title
   runjs(sprintf('$("title").html("%s");', APP_NAME))
