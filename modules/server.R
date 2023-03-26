@@ -8,16 +8,19 @@
 
 server = shinyServer(function(input, output, session) {
   
-  # Checando credenciais 
-  secure_server(
+  # Checando credenciais caso a aplicação tenha login
+  if(LOGIN){
     
-    check_credentials = check_credentials(
-      "db_login//login.sqlite",
-      passphrase = key_get("R-shinymanager-key", "admin123")
+    secure_server(
+      
+      check_credentials = check_credentials(
+        "db_login//login.sqlite",
+        passphrase = "passphrase_wihtout_keyring"
+      )
+      
     )
     
-  )
-  
+  }
   data = reactive({
     
     # Lendo arquivo com dados para a análise

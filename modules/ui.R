@@ -1,10 +1,6 @@
-
-
 ui = dashboardPage(
   
-  
   #========================header=========================
-  
   dashboardHeader(
     title = tags$img(src='logos//crea.png', width = 50),
     tags$li(class = "dropdown header-logo",
@@ -12,7 +8,7 @@ ui = dashboardPage(
     )
   ),
   
-  #===============================================data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAWElEQVR42mNgGPTAxsZmJsVqQApgmGw1yApwKcQiT7phRBuCzzCSDSHGMKINIeDNmWQlA2IigKJwIssQkHdINgxfmBBtGDEBS3KCxBc7pMQgMYE5c/AXPwAwSX4lV3pTWwAAAABJRU5ErkJggg==========
+  #=======================================================
   
   
   #=======================SiderBar========================

@@ -18,7 +18,6 @@ app.LoadPackages = function()
   require(shinycssloaders)
   require(viridis)
   require(shinymanager)
-  require(keyring)
   
   #==============================================#
 }
@@ -58,15 +57,16 @@ app.loadGlobalFunctions = function(){
   # Função global para calcular a produtividade
   calcProdutividade <<- function(dados){
     
-    prod = 0.3350059 * dados$notif_total +
-      0.6462688 * dados$classe_1 +
-      0.3879296 * dados$classe_2 +
-      0.7690331 * dados$classe_3 +
-      0.7067577 * dados$classe_4 +
-      2.331816 * dados$classe_5 +
-      2.03694 *  dados$classe_6 +
-      2.541965 * dados$classe_7 +
-      2.833974 * dados$classe_8
+    prod = 0.5105935 * dados$notif_total+ 
+      0.0435197 * dados$aux_viagens_totais+
+      0.1892254 * dados$classe_1 +
+      0.4755206  * dados$classe_2 +
+      0.5006161 * dados$classe_3 +
+      0.6122536 * dados$classe_4 +
+      1.633267  * dados$classe_5 +
+      1.99313 * dados$classe_6 +
+      2.144695  * dados$classe_7+
+      3.264827 * dados$classe_8
     
     return(prod)
     
@@ -80,5 +80,5 @@ app.LoadPackages()
 app.loadGlobalFunctions()
 app.LoadModules()
 
-
 shinyApp(ui, server)
+

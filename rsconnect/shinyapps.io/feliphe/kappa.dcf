@@ -5,9 +5,9 @@ account: feliphe
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 8497640
-bundleId: 6924286
+bundleId: 7008744
 url: https://feliphe.shinyapps.io/kappa/
-when: 1678162029.69218
-lastSyncTime: 1678162029.69219
+when: 1679806992.45192
+lastSyncTime: 1679806992.45192
 asMultiple: FALSE
 asStatic: FALSE
