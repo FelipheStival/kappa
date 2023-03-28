@@ -75,6 +75,7 @@ app.loadGlobalFunctions = function(){
 }
 #==============================================#
 options(shiny.usecairo=T)
+options(OutDec= ",")
 
 app.LoadPackages()
 app.loadGlobalFunctions()

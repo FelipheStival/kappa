@@ -111,9 +111,10 @@ itemMenuAnaliseIndividual = function(){
            ),
            numericInput(
              inputId = 'fatorDeCorrecaoInput',
-             label = 'Fator de Correção',
+             label = 'Fator de Correção (0-100)',
              value = 0,
-             min = 0
+             min = 0,
+             max = 100
            )
   )
   
