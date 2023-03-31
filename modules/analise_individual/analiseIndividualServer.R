@@ -292,6 +292,28 @@ analiseIndividualServer = function(input, output, session, data) {
         
       })
       
+      # Total de notificações
+      output$infoTotalNot = renderInfoBox({
+        
+        infoBox(
+          title = 'Total de notificações',
+          value = dadosGraficos()$notif_total,
+          icon = icon('cog')
+        )
+        
+      })
+      
+      # Total de viagens
+      output$infoTotalVig = renderInfoBox({
+        
+        infoBox(
+          title = 'Total de viagens',
+          value = dadosGraficos()$aux_viagens_totais,
+          icon = icon('cog')
+        )
+        
+      })
+      
     }
     
   })

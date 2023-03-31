@@ -12,7 +12,9 @@ analiseEstatisticalUI = function(){
             valueBoxOutput("classe5", width = 6),
             valueBoxOutput("classe6", width = 6),
             valueBoxOutput("classe7", width = 6),
-            valueBoxOutput("classe8", width = 6)
+            valueBoxOutput("classe8", width = 6),
+            valueBoxOutput("infoTotalNot", width = 6),
+            valueBoxOutput("infoTotalVig", width = 6)
           )
   )
   
