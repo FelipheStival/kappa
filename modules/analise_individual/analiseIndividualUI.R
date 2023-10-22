@@ -32,7 +32,6 @@ analiseIndividualUI = function(){
               valueBoxOutput("relatorioAnalisados"),
               valueBoxOutput("relatorioProdutividade"),
               valueBoxOutput("relatorioCategoria"),
-              valueBoxOutput("relatorioProdutividadeExcedente"),
               valueBoxOutput("relatorioProdutividadeCorrigida"),
               valueBoxOutput("relatorioProdutividadeCorrigidaCategoria")
             )
@@ -95,7 +94,7 @@ itemMenuTrocarCategoria = function(){
 itemMenuAnaliseIndividual = function(){
   
   
-  menuItem(text = "Análise individual",
+  menuItem(text = "Análise de Produtividade",
            icon = icon("line-chart"),
            menuSubItem("Análise Gráfica", tabName = "analiseIndividual"),
            menuSubItem("Estátistica", tabName = "analiseEstatistica"),
@@ -103,13 +102,13 @@ itemMenuAnaliseIndividual = function(){
              inputId = "fiscalInput",
              label = "Fiscal",
              choices = NULL,
-             selected = ""
+             multiple = T,
            ),
            selectInput(
              inputId = "periodoInput",
              label = "Período",
              choices = NULL,
-             selected = ""
+             multiple = T
            ),
            numericInput(
              inputId = 'fatorDeCorrecaoInput',

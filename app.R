@@ -57,16 +57,14 @@ app.loadGlobalFunctions = function(){
   # Função global para calcular a produtividade
   calcProdutividade <<- function(dados){
     
-    prod = 0.5105935 * dados$notif_total+ 
-      0.0435197 * dados$aux_viagens_totais+
-      0.1892254 * dados$classe_1 +
-      0.4755206  * dados$classe_2 +
-      0.5006161 * dados$classe_3 +
-      0.6122536 * dados$classe_4 +
-      1.633267  * dados$classe_5 +
-      1.99313 * dados$classe_6 +
-      2.144695  * dados$classe_7+
-      3.264827 * dados$classe_8
+    prod = 0.98 * dados$notif_total+
+      1.04 * dados$classe_1 +
+      1.46  * dados$classe_2 +
+      1.61 * dados$classe_3 +
+      2.45 * dados$classe_4 +
+      3.75* dados$classe_5 +
+      5.91 * dados$classe_6
+    
     
     return(prod)
     

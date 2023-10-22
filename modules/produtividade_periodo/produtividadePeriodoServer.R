@@ -24,12 +24,12 @@ produtividadePeriodoServer = function(input, output, session, data) {
       
       # Calculando dados por fiscal/periodo
       dadosFiscal = dados %>%
-        filter(sigla_fiscal == input$fiscalInputProd) %>%
-        select(ano_mes, prod)
+        filter(sigla_fiscal %in% input$fiscalInputProd) %>%
+        select(ano_mes, prod, sigla_fiscal)
       
       dadosFiscal = melt(dadosFiscal)
-      dadosFiscal$variable = input$fiscalInputProd
-      
+      dadosFiscal$variable = dadosFiscal$sigla_fiscal
+      dadosFiscal$sigla_fiscal = NULL
       
       # Calculando dados por periodo
       dadosPeriodo = dados %>%
@@ -41,10 +41,14 @@ produtividadePeriodoServer = function(input, output, session, data) {
       
       dadosPeriodo = melt(dadosPeriodo)
       
+      dadosPeriodo = dadosPeriodo[, c("ano_mes", "variable", "value")]
+      dadosFiscal  = dadosFiscal[, c("ano_mes", "variable", "value")]
+      
       # Juntando data.frames
       dados = rbind(dadosPeriodo, dadosFiscal)
       
       return(dados)
+      
       
     }
     
@@ -52,18 +56,38 @@ produtividadePeriodoServer = function(input, output, session, data) {
     
   })
   
+  # Criando dados formatados para downlaod e criação do gráfico
+  dadosLegenda = reactive({
+    
+    dadosLegenda = dcast(dadosGraficoPeriodo(), variable ~ ano_mes ) %>% mutate_if(is.numeric, round, digits = 3)
+    
+    dadosLegenda$variable = as.character(dadosLegenda$variable)
+    
+    dadosLegenda$variable[1] = 'Máximo'
+    dadosLegenda$variable[2] = 'Mínimo'
+    
+    names(dadosLegenda)[1] = 'Variável'
+    
+    return(dadosLegenda)
+    
+  })
+  
   # Atualizando input de Fiscal
   observe({
-    
-      # Filtrando dados
-      fiscal = unique(data$sigla_fiscal)
       
-      # Atualizando input
-      updateSelectInput(session = session,
-                        inputId = "fiscalInputProd",
-                        choices = fiscal,
-                        selected = fiscal[1]
-      )
+      if(is.null(input$fiscalInputProd)) {
+        
+        # Filtrando dados
+        fiscal = unique(data$sigla_fiscal)
+        
+        # Atualizando input
+        updateSelectInput(session = session,
+                          inputId = "fiscalInputProd",
+                          choices = fiscal,
+                          selected = fiscal[1]
+        )
+        
+      }
     
   })
   
@@ -71,12 +95,12 @@ produtividadePeriodoServer = function(input, output, session, data) {
   # Atualizando input de periodo
   observe({
     
-    if(!is.null(input$fiscalInput)){
+    if(!is.null(input$fiscalInputProd)){
       
-      if(input$fiscalInput != ""){
+      if(length(input$fiscalInputProd) > 0){
         
         # Filtrando dados
-        periodos = unique(data[data$sigla_fiscal %in% input$fiscalInput, 'ano_mes'])
+        periodos = unique(data[data$sigla_fiscal %in% input$fiscalInputProd, 'ano_mes'])
         
         minPeriodo = min(periodos)
         maxPeriodo = max(periodos)
@@ -120,7 +144,7 @@ produtividadePeriodoServer = function(input, output, session, data) {
           
           infoBox(
             title = 'Produtividade Media',
-            value = round( mean(dadosTemp$prod), 2),
+            value = round(mean(dadosTemp$prod), 2),
             icon = icon('info-circle'),
             color = 'aqua'
           )
@@ -169,6 +193,17 @@ produtividadePeriodoServer = function(input, output, session, data) {
     
   })
   
+  # Escrevendo tabela
+  output$produtividadeTable = renderDataTable({
+    
+    if(!is.null(dadosGraficoPeriodo())){
+      
+      return(datatable(dadosLegenda(), options = list(scrollX = TRUE, dom = 't'), escape = FALSE))
+      
+    }
+    
+  })
+  
   # Escrevendo gráfico de produtivadade por periódo
   output$produtividadePeriodo = renderPlot({
     
@@ -178,24 +213,14 @@ produtividadePeriodoServer = function(input, output, session, data) {
     
   })
   
-  # Escrevendo tabela
-  output$produtividadeTable = renderDataTable({
-    
-    if(!is.null(dadosGraficoPeriodo())){
-      
-      dadosLegenda = dcast(dadosGraficoPeriodo(), variable ~ ano_mes )
-      dadosLegenda$variable = as.character(dadosLegenda$variable)
-      
-      dadosLegenda$variable[1] = '<center><img src="icon//maximo.png" height="13" width="30">Máximo</img></center>'
-      dadosLegenda$variable[2] = '<center><img src="icon//minimo.png" height="13" width="30">Mínimo</img></center>'
-      dadosLegenda$variable[3] = sprintf('<center><img src="icon//input.png" height="13" width="32"><br>%s</img></center>', input$fiscalInputProd)
-      
-      names(dadosLegenda)[1] = 'Variável'
-      
-      return(datatable(dadosLegenda, options = list(scrollX = TRUE, dom = 't'), escape = FALSE))
-      
+  # Download dos dados
+  output$btnDownload = downloadHandler(
+    filename = function() {
+      'dados.csv'
+    },
+    content = function(file) {
+      write.csv(dadosLegenda(), file, row.names = FALSE)
     }
-    
-  })
+  )
   
 }

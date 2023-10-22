@@ -16,7 +16,8 @@ produtividadePeriodoUI = function(){
                 column(
                   width = 12,
                   plotOutput('produtividadePeriodo', width = '100%', height = '80vh'),
-                  dataTableOutput('produtividadeTable')
+                  dataTableOutput('produtividadeTable'),
+                  downloadButton('btnDownload', 'Download', 'btn-primary btn-download')
                 )
               )
           )
@@ -46,7 +47,7 @@ itemMenuProdutividadePeriodo = function(){
                inputId = "fiscalInputProd",
                label = "Fiscal",
                choices = NULL,
-               selected = ""
+               multiple = T
              )
     ), tabName = 'produtividadePeriodo')
   

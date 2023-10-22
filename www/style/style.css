@@ -33,7 +33,7 @@
 }
 
 .infox-box-analise-individual .shiny-bound-output{
-  width: 16.65%;
+  width: 20%;
 }
 
 .infox-box-analise-individual .small-box {
@@ -41,9 +41,10 @@
 }
 
 .infox-box-analise-individual .small-box .icon-large {
- font-size: 50px;
- bottom: 18px;
+ font-size: 40px;
+ bottom: 0px;
  right: 15px;
+ top: 20px;
 }
 
 .sidebar-menu{
@@ -136,5 +137,10 @@
 
 .infox-box-analise-individual .small-box .icon-large{
   color: #F5F5F5;
+}
+
+.btn-download{
+  margin-top: 20px;
+  color: white;
 }
 

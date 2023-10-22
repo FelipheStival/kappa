@@ -14,10 +14,10 @@ analiseIndividualServer = function(input, output, session, data) {
     if(!is.null(input$fiscalInput) && !is.null(input$periodoInput)){
       
       # Filtrando dados de acordo com os inputs
-      if(input$fiscalInput != "" && input$periodoInput != ""){
+      if(length(input$fiscalInput) > 0 && length(input$periodoInput) > 0){
         
         dadosFiltrados = data[data$sigla_fiscal %in% input$fiscalInput &
-                              data$ano_mes %in% input$periodoInput,]
+                                data$ano_mes %in% input$periodoInput,]
         
         return(dadosFiltrados)
         
@@ -32,7 +32,7 @@ analiseIndividualServer = function(input, output, session, data) {
   # Dados periodo
   dadosPeriodo = reactive({
     
-    if(input$periodoInput != ""){
+    if(length(input$periodoInput) > 0){
       
       dadosFiltrados = data[data$ano_mes %in% input$periodoInput,]
       return(dadosFiltrados)
@@ -47,23 +47,27 @@ analiseIndividualServer = function(input, output, session, data) {
   # dados categoria 
   classificacaoCategoria <<- data.frame(
     categoria =  c('A', 'B', 'C', 'D', 'E', 'F'),
-    minimo = c(0, 100, 200, 300, 400, 500),
-    maximo = c(100, 200, 300, 400, 500, 600)
+    minimo = c(0, 200, 500, 800, 1100, 1400),
+    maximo = c(200, 500, 800, 1100, 1400, 2000)
   )
   
   
   # Atualizando input de Fiscal
   observe({
     
+    if(is.null(input$fiscalInput)) {
+      
       # Filtrando dados
       fiscal = unique(data$sigla_fiscal)
-        
+      
       # Atualizando input
       updateSelectInput(session = session,
                         inputId = "fiscalInput",
                         choices = fiscal,
                         selected = fiscal[1]
       )
+      
+    }
     
   })
   
@@ -122,7 +126,7 @@ analiseIndividualServer = function(input, output, session, data) {
       output$relatorioAnalisados = renderValueBox({
         
         valueBox(
-          value = dadosGraficos()$num_RMO,
+          value = sum(dadosGraficos()$num_RMO),
           subtitle = 'Relátorios Analisados',
           icon = icon('file-text')
         )
@@ -133,45 +137,32 @@ analiseIndividualServer = function(input, output, session, data) {
       output$relatorioProdutividade = renderValueBox({
         
         valueBox(
-          value = round(dadosGraficos()$prod, 2),
+          value = sum(round(dadosGraficos()$prod, 2)),
           subtitle = 'Produtividade',
           icon = icon('line-chart')
         )
-
+        
         
       })
       
       # Calcular categoria
       output$relatorioCategoria = renderValueBox({
         
-        categoria = calcularCategoria(dadosGraficos()$prod)
+        categoria = calcularCategoria(sum(dadosGraficos()$prod))
         
         valueBox(
           value = categoria,
           subtitle = 'Categoria',
           icon = icon('list')
         )
-      
         
-      })
-      
-      # Calcular produtividade excedente
-      output$relatorioProdutividadeExcedente = renderValueBox({
-        
-        prodExcedente = dadosGraficos()$prod %% 100
-        
-        valueBox(
-          value = round(prodExcedente, 2),
-          subtitle = 'Produtividade excedente',
-          icon = icon('line-chart')
-        )
         
       })
       
       # Escrendo infobox Produtividade Corrigida
       output$relatorioProdutividadeCorrigida = renderValueBox({
         
-        valor = calcularProdutividadeRelativa(input$fatorDeCorrecaoInput, dadosGraficos()$prod)
+        valor = calcularProdutividadeRelativa(input$fatorDeCorrecaoInput, sum(dadosGraficos()$prod))
         
         valueBox(
           value = round(valor, 2),
@@ -184,7 +175,7 @@ analiseIndividualServer = function(input, output, session, data) {
       # Escrevendo infobox produtividade relativa
       output$relatorioProdutividadeCorrigidaCategoria = renderValueBox({
         
-        valorProd = calcularProdutividadeRelativa(input$fatorDeCorrecaoInput, dadosGraficos()$prod)
+        valorProd = calcularProdutividadeRelativa(input$fatorDeCorrecaoInput, sum(dadosGraficos()$prod))
         categoria = calcularCategoria(valorProd)
         
         valueBox(
@@ -209,7 +200,7 @@ analiseIndividualServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Classe 1',
-          value = dadosGraficos()$classe_1,
+          value = sum( dadosGraficos()$classe_1),
           icon = icon('cog')
         )
         
@@ -220,7 +211,7 @@ analiseIndividualServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Classe 2',
-          value = dadosGraficos()$classe_2,
+          value = sum(dadosGraficos()$classe_2),
           icon = icon('cog')
         )
         
@@ -231,7 +222,7 @@ analiseIndividualServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Classe 3',
-          value = dadosGraficos()$classe_3,
+          value = sum(dadosGraficos()$classe_3),
           icon = icon('cog')
         )
         
@@ -242,7 +233,7 @@ analiseIndividualServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Classe 4',
-          value = dadosGraficos()$classe_4,
+          value = sum(dadosGraficos()$classe_4),
           icon = icon('cog')
         )
         
@@ -253,7 +244,7 @@ analiseIndividualServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Classe 5',
-          value = dadosGraficos()$classe_5,
+          value = sum(dadosGraficos()$classe_5),
           icon = icon('cog')
         )
         
@@ -264,40 +255,19 @@ analiseIndividualServer = function(input, output, session, data) {
         
         infoBox(
           title = 'Classe 6',
-          value = dadosGraficos()$classe_6,
+          value = sum(dadosGraficos()$classe_6),
           icon = icon('cog')
         )
         
       })
       
-      # Classe 7 config
-      output$classe7 = renderInfoBox({
-        
-        infoBox(
-          title = 'Classe 7',
-          value = dadosGraficos()$classe_7,
-          icon = icon('cog')
-        )
-        
-      })
-      
-      # Classe 8 config
-      output$classe8 = renderInfoBox({
-        
-        infoBox(
-          title = 'Classe 8',
-          value = dadosGraficos()$classe_8,
-          icon = icon('cog')
-        )
-        
-      })
       
       # Total de notificações
       output$infoTotalNot = renderInfoBox({
         
         infoBox(
-          title = 'Total de notificações',
-          value = dadosGraficos()$notif_total,
+          title = 'Notificações',
+          value = sum(dadosGraficos()$notif_total),
           icon = icon('cog')
         )
         
@@ -307,8 +277,8 @@ analiseIndividualServer = function(input, output, session, data) {
       output$infoTotalVig = renderInfoBox({
         
         infoBox(
-          title = 'Total de viagens',
-          value = dadosGraficos()$aux_viagens_totais,
+          title = 'RMO em Viagens',
+          value = sum(dadosGraficos()$aux_viagens_totais),
           icon = icon('cog')
         )
         
@@ -323,15 +293,19 @@ analiseIndividualServer = function(input, output, session, data) {
     
     if(!is.null(input$fiscalInput)){
       
-      # Filtrando dados
-      periodos = unique(data[data$sigla_fiscal %in% input$fiscalInput, 'ano_mes'])
-      
-      # Atualizando input
-      updateSelectInput(session = session,
-                        inputId = "periodoInput",
-                        choices = periodos,
-                        selected = periodos[1]
-      )
+      if(is.null(input$periodoInput)){
+        
+        # Filtrando dados
+        periodos = unique(data[data$sigla_fiscal %in% input$fiscalInput, 'ano_mes'])
+        
+        # Atualizando input
+        updateSelectInput(session = session,
+                          inputId = "periodoInput",
+                          choices = periodos,
+                          selected = periodos[1]
+        )
+        
+      }
       
     }
     
@@ -346,7 +320,7 @@ analiseIndividualServer = function(input, output, session, data) {
       # Removendo categoria
       indexRemove = which(classificacaoCategoria$categoria == input$categoriaInput)
       classificacaoCategoria <<- classificacaoCategoria[-indexRemove, ]
-  
+      
       # Atualizando nova opção no input de selecao
       updateSelectInput(session = session,
                         inputId = "categoriaInput",
@@ -402,7 +376,7 @@ analiseIndividualServer = function(input, output, session, data) {
         if(falhou)
           HTML(
             sprintf(
-            '<div class="alert alert-danger" role="alert">
+              '<div class="alert alert-danger" role="alert">
                 <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                 %s
             </div>', messagem)
